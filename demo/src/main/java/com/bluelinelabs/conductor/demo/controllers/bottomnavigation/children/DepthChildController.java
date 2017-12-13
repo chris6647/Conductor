@@ -1,7 +1,6 @@
-package com.bluelinelabs.conductor.demo.controllers;
+package com.bluelinelabs.conductor.demo.controllers.bottomnavigation.children;
 
 import android.os.Bundle;
-
 
 import android.annotation.SuppressLint;
 import android.support.annotation.ColorInt;

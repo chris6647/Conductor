@@ -35,6 +35,7 @@ import com.bluelinelabs.conductor.demo.changehandler.ArcFadeMoveChangeHandler;
 import com.bluelinelabs.conductor.demo.changehandler.FabToDialogTransitionChangeHandler;
 import com.bluelinelabs.conductor.demo.controllers.NavigationDemoController.DisplayUpMode;
 import com.bluelinelabs.conductor.demo.controllers.base.BaseController;
+import com.bluelinelabs.conductor.demo.controllers.bottomnavigation.DemoBottomNavigationController;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -203,8 +204,7 @@ public class HomeController extends BaseController {
                         .popChangeHandler(new FadeChangeHandler()));
                 break;
             case BOTTOM_NAVIGATION:
-                getRouter().pushController(RouterTransaction.with(new BottomNavigationController
-                                                                          (R.menu.navigation))
+                getRouter().pushController(RouterTransaction.with(new DemoBottomNavigationController())
                                                             .pushChangeHandler(new FadeChangeHandler())
                                                             .popChangeHandler(new FadeChangeHandler()));
                 break;
