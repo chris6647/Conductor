@@ -89,6 +89,26 @@ public abstract class BottomNavigationController extends BaseController {
     /* Setup the BottomNavigationView with the constructor supplied Menu resource */
     bottomNavigationView.inflateMenu(getMenuResource());
 
+    bottomNavigationView.setOnNavigationItemSelectedListener(
+        new BottomNavigationView.OnNavigationItemSelectedListener() {
+          @Override
+          public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            if (currentlySelectedItemId != item.getItemId()) {
+              BottomNavigationController.this.destroyChildRouter(BottomNavigationController.this.getChildRouter(currentlySelectedItemId), currentlySelectedItemId);
+              currentlySelectedItemId = item.getItemId();
+              BottomNavigationController.this.configureRouter(BottomNavigationController.this.getChildRouter(currentlySelectedItemId), currentlySelectedItemId);
+            } else {
+              BottomNavigationController.this.resetCurrentBackstack();
+            }
+            return true;
+          }
+        });
+  }
+
+  @Override
+  protected void onAttach(@NonNull View view) {
+    super.onAttach(view);
+
     /* Fresh start, setup everything */
     if (routerSavedStateBundles == null) {
       Menu menu = bottomNavigationView.getMenu();
@@ -120,21 +140,6 @@ public abstract class BottomNavigationController extends BaseController {
       childRouter.rebindIfNeeded();
       lastActiveChildRouter = childRouter;
     }
-
-    bottomNavigationView.setOnNavigationItemSelectedListener(
-        new BottomNavigationView.OnNavigationItemSelectedListener() {
-          @Override
-          public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            if (currentlySelectedItemId != item.getItemId()) {
-              BottomNavigationController.this.destroyChildRouter(BottomNavigationController.this.getChildRouter(currentlySelectedItemId), currentlySelectedItemId);
-              currentlySelectedItemId = item.getItemId();
-              BottomNavigationController.this.configureRouter(BottomNavigationController.this.getChildRouter(currentlySelectedItemId), currentlySelectedItemId);
-            } else {
-              BottomNavigationController.this.resetCurrentBackstack();
-            }
-            return true;
-          }
-        });
   }
 
   /**
