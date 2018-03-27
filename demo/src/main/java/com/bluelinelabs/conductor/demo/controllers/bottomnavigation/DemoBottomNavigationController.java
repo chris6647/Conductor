@@ -1,6 +1,5 @@
 package com.bluelinelabs.conductor.demo.controllers.bottomnavigation;
 
-import android.os.Bundle;
 import android.support.annotation.IdRes;
 
 import com.bluelinelabs.conductor.Controller;
@@ -63,7 +62,7 @@ public class DemoBottomNavigationController extends BottomNavigationController {
    */
   public void navigateTo(Controller controller) {
     BottomNavigationMenuItem item = BottomNavigationMenuItem.getEnum(controller.getClass());
-    navigateTo(item.getMenuResId(), controller);
+    navigateTo(item.getMenuResId());
   }
 
 }
