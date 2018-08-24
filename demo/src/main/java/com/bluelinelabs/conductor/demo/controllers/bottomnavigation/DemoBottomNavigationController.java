@@ -1,6 +1,7 @@
 package com.bluelinelabs.conductor.demo.controllers.bottomnavigation;
 
 import android.support.annotation.IdRes;
+import android.support.annotation.NonNull;
 
 import com.bluelinelabs.conductor.Controller;
 import com.bluelinelabs.conductor.demo.R;
@@ -26,15 +27,17 @@ public class DemoBottomNavigationController extends BottomNavigationController {
    * @param itemId
    */
   @Override
-  protected Controller getControllerFor(@IdRes int itemId) {
-    Constructor[] constructors =
-        BottomNavigationMenuItem.getEnum(itemId).getControllerClass().getConstructors();
+  protected @NonNull
+  Controller getControllerFor(@IdRes int itemId) {
+    BottomNavigationMenuItem bottomNavigationMenuItem = BottomNavigationMenuItem.getEnum(itemId);
+    Constructor[] constructors = bottomNavigationMenuItem.getControllerClass().getConstructors();
     Controller controller = null;
     try {
-      /* Determine default or Bundle constructor */
+      /* Determine default constructor */
       for (Constructor constructor : constructors) {
-         if (constructor.getParameterTypes().length == 0) {
+        if (constructor.getParameterTypes().length == 0) {
           controller = (Controller) constructor.newInstance();
+          break;
         }
       }
     } catch (Exception e) {
@@ -46,23 +49,25 @@ public class DemoBottomNavigationController extends BottomNavigationController {
           e);
     }
 
-    if(controller == null){
-      throw new RuntimeException(
-          "Controller must have a public empty constructor. "
-              + itemId);
+    if (controller == null) {
+      throw new RuntimeException("Controller must have a public an empty constructor. " + itemId);
     }
     return controller;
   }
 
-  /**
-   * Supplied Controller must match a MenuItemId as defined in {@link BottomNavigationMenuItem} or
-   * an {@link IllegalArgumentException} will be thrown.
-   *
-   * @param controller
-   */
-  public void navigateTo(Controller controller) {
-    BottomNavigationMenuItem item = BottomNavigationMenuItem.getEnum(controller.getClass());
-    navigateTo(item.getMenuResId());
+  @Override
+  protected boolean isSupportedController(@NonNull Controller controller) {
+    return BottomNavigationMenuItem.getEnum(controller.getClass()) != null;
+  }
+
+  @Override
+  protected @IdRes int getIdForController(@NonNull Controller controller) {
+    return BottomNavigationMenuItem.getEnum(controller.getClass()).getMenuResId();
+  }
+
+  @Override
+  protected String getTag() {
+    return DemoBottomNavigationController.TAG;
   }
 
 }
